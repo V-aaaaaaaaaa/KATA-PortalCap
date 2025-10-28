@@ -23,4 +23,24 @@ Java 17+,
 Maven,
 Docker
 
+Para la ejecución del proyecto se debe:
+1. Clonar el repositorio con git clone: https://github.com/V-aaaaaaaaaa/KATA-PortalCap.git
+
+2. Acceder a La carpeta principal KATA-PortalCap
+
+3. Una vez en la carpeta, levantar los servicios de docker: docker-compose up --build. (La primera ejecución suele tardar unos minutos mientras se construye).
+
+4. Finalmente acceder a la aplicación, para iniciar sesión y usar la aplicación: :http://localhost:8080/ (Nota: Los endpoints de la API están protegidos por Spring Security y requieren autenticación (JWT).
+MailHog:http://localhost:8025/
+
+El sistema crea automaticamente desde la base de datos, datos de prueba (usuarios, módulos, cursos, capítulos, progreso, insignias, notificaciones).
+Cada módulo agrupa varios cursos. Cada curso está dividido en capitulos que puede incluir videos y documentos.
+El progreso de cada usuario se gestiona mediante la tabla de "user_progress"
+El modelo es totalemente escalable, permitiendo añadir nuevos tipos de contenido sin alterar la estructura.
+
+
+
+
+
+
 
