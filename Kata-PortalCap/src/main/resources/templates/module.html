@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="moduleTitle">Módulo - Portal de Capacitaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --azul-oscuro: #0D2D5C;
+            --azul-medio: #1E4A8B;
+            --amarillo: #FFD100;
+            --rojo: #E4002B;
+            --verde: #00A86B;
+            --gris-claro: #f5f7fa;
+            --gris-medio: #e4e7eb;
+            --texto-oscuro: #2C3E50;
+            --texto-medio: #5D6D7E;
+        }
+
+        body {
+            background-color: var(--gris-claro);
+            color: var(--texto-oscuro);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            padding: 20px 0;
+            color: white;
+            box-shadow: 0 2px 15px rgba(13, 45, 92, 0.2);
+            border-bottom: 3px solid var(--amarillo);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .admin-title i {
+            color: var(--amarillo);
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(228, 0, 43, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #C40024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(228, 0, 43, 0.4);
+        }
+
+        /* Main Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Módulo Header */
+        .module-hero {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(13, 45, 92, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .module-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--amarillo);
+        }
+
+        .module-hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .module-hero-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(13, 45, 92, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(13, 45, 92, 0.15);
+            border-color: var(--azul-medio);
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .course-difficulty {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-beginner {
+            background: var(--verde);
+            color: white;
+        }
+
+        .difficulty-intermediate {
+            background: var(--azul-medio);
+            color: white;
+        }
+
+        .difficulty-advanced {
+            background: var(--rojo);
+            color: white;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            padding-right: 80px;
+        }
+
+        .course-instructor {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .course-content {
+            padding: 20px;
+        }
+
+        .course-description {
+            color: var(--texto-medio);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .course-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--texto-medio);
+        }
+
+        .meta-item i {
+            color: var(--azul-medio);
+            width: 16px;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(13, 45, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 45, 92, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gris-medio);
+            color: var(--texto-oscuro);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbe2;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--texto-medio);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(13, 45, 92, 0.08);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--gris-medio);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--azul-oscuro);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--texto-medio);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(13, 45, 92, 0.08);
+            grid-column: 1 / -1;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--azul-medio);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .module-hero {
+                padding: 25px;
+                text-align: center;
+            }
+            
+            .module-hero-title {
+                font-size: 2rem;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <div class="header-content">
+            <h1 class="admin-title">
+                <i class="fas fa-laptop-code" id="moduleIcon"></i> <span id="moduleName">Cargando...</span>
+            </h1>
+            <button class="back-btn" onclick="window.location.href='/capacitaciones'">
+                <i class="fas fa-arrow-left"></i> Volver a Módulos
+            </button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="module-hero">
+            <div class="module-icon">
+                <i class="fas fa-laptop-code" id="heroIcon"></i>
+            </div>
+            <h1 class="module-hero-title" id="heroTitle">Cargando módulo...</h1>
+            <p class="module-hero-description" id="heroDescription">
+                Cargando descripción del módulo...
+            </p>
+        </div>
+
+        <div class="courses-grid" id="coursesGrid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Cargando cursos...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        
+        // Obtener el id del modulo de la url
+        function getModuleIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('moduleId');
+        }
+
+        // informacion del modulo y cursos
+        async function loadModuleData() {
+            const moduleId = getModuleIdFromURL();
+            
+            if (!moduleId) {
+                showError('No se especificó el módulo');
+                return;
+            }
+
+            try {
+                const moduleResponse = await fetch(`${API_URL}/modules/${moduleId}/with-courses`);
+                if (!moduleResponse.ok) throw new Error('Error al cargar el módulo');
+                
+                const moduleData = await moduleResponse.json();
+                displayModuleInfo(moduleData);
+                displayCourses(moduleData.courses);
+
+            } catch (error) {
+                showError('Error al cargar los datos del módulo');
+                console.error('Error:', error);
+            }
+        }
+
+        // Mostrar información del módulo
+        function displayModuleInfo(moduleData) {
+            document.getElementById('moduleName').textContent = moduleData.name;
+            document.getElementById('heroTitle').textContent = moduleData.name;
+            document.getElementById('heroDescription').textContent = moduleData.description || 'Descripción no disponible';
+            
+            //icono 
+            const icon = getModuleIcon(moduleData.id) || moduleData.icon || 'fas fa-book';
+            document.getElementById('moduleIcon').className = icon;
+            document.getElementById('heroIcon').className = icon;
+
+            // titulo de la pagina
+            document.getElementById('moduleTitle').textContent = `${moduleData.name} - Portal de Capacitaciones`;
+        }
+
+        // Mostrar cursos
+        function displayCourses(courses) {
+            const coursesGrid = document.getElementById('coursesGrid');
+            
+            if (courses.length === 0) {
+                coursesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No hay cursos disponibles</h3>
+                        <p>Próximamente agregaremos nuevos cursos a este módulo.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            coursesGrid.innerHTML = courses.map(course => `
+                <div class="course-card">
+                    <div class="course-header">
+                        <span class="course-difficulty ${getDifficultyClass(course.difficulty)}">
+                            ${getDifficultyText(course.difficulty)}
+                        </span>
+                        <h3 class="course-title">${course.title}</h3>
+                        <div class="course-instructor">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            ${course.instructor || 'Instructor no asignado'}
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <p class="course-description">${course.description || 'Descripción no disponible'}</p>
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${course.durationHours || 'N/A'} horas</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-play-circle"></i>
+                                <span>${course.totalChapters || 'N/A'} lecciones</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn-primary" onclick="viewCourse(${course.id})">
+                                <i class="fas fa-play-circle"></i> Ver Curso
+                            </button>
+                            <button class="btn-secondary" onclick="viewCourseDetails(${course.id})">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // funciones auxiliares
+        function getModuleIcon(moduleId) {
+            const icons = {
+                1: 'fas fa-laptop-code',
+                2: 'fas fa-mobile-alt',
+                3: 'fas fa-cloud',
+                4: 'fas fa-database'
+            };
+            return icons[moduleId] || 'fas fa-book';
+        }
+
+        function getDifficultyClass(difficulty) {
+            const classes = {
+                'BEGINNER': 'difficulty-beginner',
+                'INTERMEDIATE': 'difficulty-intermediate',
+                'ADVANCED': 'difficulty-advanced'
+            };
+            return classes[difficulty] || 'difficulty-beginner';
+        }
+
+        function getDifficultyText(difficulty) {
+            const levels = {
+                'BEGINNER': 'Principiante',
+                'INTERMEDIATE': 'Intermedio',
+                'ADVANCED': 'Avanzado'
+            };
+            return levels[difficulty] || difficulty;
+        }
+
+        function showError(message) {
+            const coursesGrid = document.getElementById('coursesGrid');
+            coursesGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+        
+        function viewCourse(courseId) {
+            window.location.href = `/course/${courseId}`;
+        }
+
+        function viewCourseDetails(courseId) {
+            alert(`Detalles del curso ID: ${courseId}`);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadModuleData);
+    </script>
+</body>
+</html>
