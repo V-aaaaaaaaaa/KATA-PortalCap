@@ -13,7 +13,7 @@ MySQL (contenedorizado con Docker)
 Frontend:
 HTML, CSS y JavaScript integrados en un mismo archivo (sin rutas externas, debido a limitaciones locales de ejecución)
 
-Email Service: MailHog (No se implementó completamente el envió de correos, pero el está configurado correctamente.)
+Email Service: MailHog (No se implementó completamente el envió de correos, pero está configurado correctamente.)
 
 Despliegue:
 Docker Compose
