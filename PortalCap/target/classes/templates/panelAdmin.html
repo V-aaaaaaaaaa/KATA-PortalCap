@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Portal de Capacitaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --azul-oscuro: #0D2D5C;
+            --azul-medio: #1E4A8B;
+            --amarillo: #FFD100;
+            --rojo: #E4002B;
+            --verde: #00A86B;
+            --gris-claro: #f5f7fa;
+            --gris-medio: #e4e7eb;
+            --texto-oscuro: #2C3E50;
+            --texto-medio: #5D6D7E;
+        }
+
+        body {
+            background-color: var(--gris-claro);
+            color: var(--texto-oscuro);
+            line-height: 1.6;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            padding: 20px 0;
+            color: white;
+            box-shadow: 0 2px 15px rgba(13, 45, 92, 0.2);
+            border-bottom: 3px solid var(--amarillo);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .admin-title i {
+            color: var(--amarillo);
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(228, 0, 43, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #C40024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(228, 0, 43, 0.4);
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .success-message, .error-message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: none;
+            border-left: 4px solid transparent;
+        }
+
+        .success-message {
+            background: #e8f8f0;
+            color: var(--verde);
+            border-left-color: var(--verde);
+        }
+
+        .error-message {
+            background: #fde8e8;
+            color: var(--rojo);
+            border-left-color: var(--rojo);
+        }
+
+        .success-message.show, .error-message.show {
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(13, 45, 92, 0.08);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--texto-medio);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(13, 45, 92, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(13, 45, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 45, 92, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-danger:hover {
+            background: #C40024;
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: var(--azul-medio);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 8px;
+        }
+
+        .btn-edit:hover {
+            background: var(--azul-oscuro);
+            transform: translateY(-1px);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(13, 45, 92, 0.1);
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--gris-medio);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        tbody tr {
+            transition: background 0.3s;
+        }
+
+        tbody tr:hover {
+            background: var(--gris-claro);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 2px solid var(--azul-medio);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gris-medio);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--azul-oscuro);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--texto-medio);
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--rojo);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--azul-oscuro);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gris-medio);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--azul-medio);
+            box-shadow: 0 0 0 3px rgba(30, 74, 139, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gris-medio);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--texto-medio);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--azul-medio);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-header">
+        <div class="header-content">
+            <h1 class="admin-title">
+                <i class="fas fa-cogs"></i> Panel de Administración
+            </h1>
+            <button class="back-btn" onclick="window.location.href='/dashboard'">
+                <i class="fas fa-arrow-left"></i> Volver al Portal
+            </button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="success-message" id="successMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('courses')">
+                <i class="fas fa-book"></i> Gestionar Cursos
+            </button>
+            <button class="tab-btn" onclick="switchTab('users')">
+                <i class="fas fa-users"></i> Gestionar Usuarios
+            </button>
+        </div>
+
+        <div class="tab-content active" id="coursesTab">
+            <button class="btn-primary" onclick="window.location.href='/courseForm'">
+                <i class="fas fa-plus"></i> Nuevo Curso
+            </button>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Módulo</th>
+                            <th>Instructor</th>
+                            <th>Duración</th>
+                            <th>Nivel</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando cursos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="usersTab">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="4" class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando usuarios...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="courseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="courseModalTitle">Nuevo Curso</h2>
+                <button class="close-modal" onclick="closeCourseModal()">&times;</button>
+            </div>
+
+            <form id="courseForm" onsubmit="saveCourse(event)">
+                <input type="hidden" id="courseId">
+
+                <div class="form-group">
+                    <label for="courseTitle">Título del Curso *</label>
+                    <input type="text" id="courseTitle" required placeholder="Ingresa el título del curso">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="courseModule">Módulo *</label>
+                        <select id="courseModule" required>
+                            <option value="">Seleccionar módulo...</option>
+                            <option value="1">Fullstack Development</option>
+                            <option value="2">APIs e Integraciones</option>
+                            <option value="3">Cloud Computing</option>
+                            <option value="4">Data Engineering</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseDifficulty">Nivel *</label>
+                        <select id="courseDifficulty" required>
+                            <option value="BEGINNER">Principiante</option>
+                            <option value="INTERMEDIATE">Intermedio</option>
+                            <option value="ADVANCED">Avanzado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="courseInstructor">Instructor</label>
+                        <input type="text" id="courseInstructor" placeholder="Nombre del instructor">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseDuration">Duración (horas)</label>
+                        <input type="number" id="courseDuration" min="1" placeholder="Ej: 8">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="courseDescription">Descripción</label>
+                    <textarea id="courseDescription" placeholder="Describe el contenido del curso..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-danger" onclick="closeCourseModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Guardar Curso
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+    const API_URL = 'http://localhost:8080/api';
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        document.getElementById(tabName + 'Tab').classList.add('active');
+        event.target.classList.add('active');
+
+        if (tabName === 'courses') {
+            loadCourses();
+        } else if (tabName === 'users') {
+            loadUsers();
+        }
+    }
+
+    function showCourseModal(courseId = null) {
+        const modal = document.getElementById('courseModal');
+        const title = document.getElementById('courseModalTitle');
+        const form = document.getElementById('courseForm');
+        
+        if (courseId) {
+            title.textContent = 'Editar Curso';
+            loadCourseData(courseId);
+        } else {
+            title.textContent = 'Nuevo Curso';
+            form.reset();
+            document.getElementById('courseId').value = '';
+        }
+        
+        modal.classList.add('show');
+    }
+
+    function closeCourseModal() {
+        document.getElementById('courseModal').classList.remove('show');
+    }
+
+    // Guardar curso
+    async function saveCourse(event) {
+        event.preventDefault();
+        
+        const courseData = {
+            title: document.getElementById('courseTitle').value,
+            moduleId: document.getElementById('courseModule').value,
+            difficulty: document.getElementById('courseDifficulty').value,
+            instructor: document.getElementById('courseInstructor').value,
+            durationHours: document.getElementById('courseDuration').value,
+            description: document.getElementById('courseDescription').value
+        };
+
+        const courseId = document.getElementById('courseId').value;
+        const url = courseId ? `${API_URL}/courses/${courseId}` : `${API_URL}/courses`;
+        const method = courseId ? 'PUT' : 'POST';
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(courseData)
+            });
+
+            if (response.ok) {
+                showMessage('Curso guardado exitosamente', 'success');
+                closeCourseModal();
+                loadCourses();
+            } else {
+                throw new Error('Error al guardar el curso');
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    // Cargar cursos
+    async function loadCourses() {
+        try {
+            const response = await fetch(`${API_URL}/courses`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const courses = await response.json();
+            
+            const tbody = document.getElementById('coursesTableBody');
+            tbody.innerHTML = '';
+
+            if (courses.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--texto-medio);">
+                            <i class="fas fa-book" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            No hay cursos disponibles
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            courses.forEach(course => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${course.title}</td>
+                    <td>${getModuleName(course.moduleId)}</td>
+                    <td>${course.instructor || 'No asignado'}</td>
+                    <td>${course.durationHours || 'N/A'} horas</td>
+                    <td>${getDifficultyText(course.difficulty)}</td>
+                    <td>
+                        <button class="btn-edit" onclick="showCourseModal(${course.id})">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-danger" onclick="deleteCourse(${course.id})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            document.getElementById('coursesTableBody').innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: var(--rojo);">
+                        <i class="fas fa-exclamation-triangle"></i> Error al cargar los cursos
+                    </td>
+                </tr>
+            `;
+        }
+    }
+    // usuarios
+    async function loadUsers() {
+        try {
+            const response = await fetch(`${API_URL}/users`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar usuarios');
+            }
+
+            const users = await response.json();
+            
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--texto-medio);">
+                            <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            No hay usuarios registrados
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                const isLocked = user.accountLocked ? 
+                    '<i class="fas fa-lock" style="color: var(--rojo); margin-left: 5px;" title="Cuenta bloqueada"></i>' : '';
+                
+                row.innerHTML = `
+                    <td>${user.name} ${isLocked}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span style="padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; 
+                            background: ${user.role === 'ADMIN' ? 'var(--verde)' : 'var(--azul-medio)'}; color: white;">
+                            ${user.role === 'ADMIN' ? 'Administrador' : 'Usuario'}
+                        </span>
+                    </td>
+                    <td style="white-space: nowrap;">
+                        <button class="btn-edit" onclick="toggleAdmin(${user.id}, '${user.role}')">
+                            <i class="fas fa-user-shield"></i> 
+                            ${user.role === 'ADMIN' ? 'Quitar Admin' : 'Hacer Admin'}
+                        </button>
+                        ${user.accountLocked ? `
+                            <button class="btn-edit" onclick="unlockUser(${user.id})" style="background: var(--amarillo); color: var(--azul-oscuro);">
+                                <i class="fas fa-unlock"></i> Desbloquear
+                            </button>
+                        ` : ''}
+                        <button class="btn-danger" onclick="deleteUser(${user.id}, '${user.role}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('usersTableBody').innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 40px; color: var(--rojo);">
+                        <i class="fas fa-exclamation-triangle"></i> Error al cargar los usuarios
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    async function toggleAdmin(userId, currentRole) {
+        const action = currentRole === 'ADMIN' ? 'quitar el rol de administrador' : 'hacer administrador';
+        
+        if (!confirm(`¿Estás seguro de que deseas ${action} a este usuario?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/users/${userId}/toggle-admin`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage(data.message || 'Rol actualizado exitosamente', 'success');
+                loadUsers();
+            } else {
+                throw new Error(data.error || 'Error al actualizar el rol');
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    async function deleteUser(userId, userRole) {
+        if (!confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage(data.message || 'Usuario eliminado exitosamente', 'success');
+                loadUsers();
+            } else {
+                throw new Error(data.error || 'Error al eliminar el usuario');
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    async function unlockUser(userId) {
+        if (!confirm('¿Deseas desbloquear la cuenta de este usuario?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/users/${userId}/unlock`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage(data.message || 'Cuenta desbloqueada exitosamente', 'success');
+                loadUsers();
+            } else {
+                throw new Error(data.error || 'Error al desbloquear la cuenta');
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    //auxiliares
+    function getModuleName(moduleId) {
+        const modules = {
+            1: 'Fullstack Development',
+            2: 'APIs e Integraciones',
+            3: 'Cloud Computing',
+            4: 'Data Engineering'
+        };
+        return modules[moduleId] || 'Módulo no especificado';
+    }
+
+    function getDifficultyText(difficulty) {
+        const levels = {
+            'BEGINNER': 'Principiante',
+            'INTERMEDIATE': 'Intermedio',
+            'ADVANCED': 'Avanzado'
+        };
+        return levels[difficulty] || difficulty;
+    }
+
+    function showMessage(message, type) {
+        const element = document.getElementById(type + 'Message');
+        element.textContent = message;
+        element.classList.add('show');
+        setTimeout(() => element.classList.remove('show'), 5000);
+    }
+
+    function loadCourseData(courseId) {
+        document.getElementById('courseId').value = courseId;
+    }
+
+    async function deleteCourse(courseId) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/courses/${courseId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showMessage(data.message || 'Curso eliminado exitosamente', 'success');
+            loadCourses();
+        } else {
+            throw new Error(data.error || 'Error al eliminar el curso');
+        }
+    } catch (error) {
+        showMessage(error.message, 'error');
+    }
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCourses();
+    });
+</script>
+    
+</body>
+</html>
