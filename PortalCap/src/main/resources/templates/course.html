@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso - Portal de Capacitaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --azul-oscuro: #0D2D5C;
+            --azul-medio: #1E4A8B;
+            --amarillo: #FFD100;
+            --rojo: #E4002B;
+            --gris-claro: #f5f7fa;
+            --gris-medio: #e4e7eb;
+            --texto-oscuro: #2C3E50;
+            --texto-medio: #5D6D7E;
+        }
+
+        body {
+            background-color: var(--gris-claro);
+            color: var(--texto-oscuro);
+            line-height: 1.6;
+        }
+
+        /* Header simplificado */
+        .course-header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--amarillo);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .course-title-header {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            max-width: 600px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .progress-header {
+            color: white;
+            font-size: 0.9rem;
+            background: rgba(255, 209, 0, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+            overflow: hidden;
+        }
+
+        /* Sidebar de capítulos */
+        .chapters-sidebar {
+            width: 350px;
+            background: white;
+            border-right: 1px solid var(--gris-medio);
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+            border-bottom: 3px solid var(--amarillo);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-progress {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chapters-list {
+            padding: 10px;
+        }
+
+        .chapter-item {
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            background: var(--gris-claro);
+        }
+
+        .chapter-item:hover {
+            background: #e8f4f8;
+            border-color: var(--azul-medio);
+        }
+
+        .chapter-item.active {
+            background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            color: white;
+            border-color: var(--amarillo);
+        }
+
+        .chapter-item.completed {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+
+        .chapter-item.completed .chapter-check {
+            color: #4CAF50;
+        }
+
+        .chapter-item.active.completed {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .chapter-number {
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .chapter-check {
+            font-size: 1.2rem;
+            color: var(--gris-medio);
+        }
+
+        .chapter-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .chapter-duration {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Área de contenido */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .video-container {
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .video-placeholder {
+            text-align: center;
+            color: white;
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: var(--amarillo);
+        }
+
+        .video-placeholder p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        iframe, video {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+        }
+
+        .course-details {
+            padding: 30px;
+            background: white;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .course-info-header {
+            border-bottom: 2px solid var(--gris-medio);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .course-title {
+            font-size: 1.8rem;
+            color: var(--azul-oscuro);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--texto-medio);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chapter-description {
+            margin: 20px 0;
+            line-height: 1.8;
+            color: var(--texto-medio);
+        }
+
+        .complete-btn {
+            background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(13, 45, 92, 0.3);
+            margin-top: 20px;
+        }
+
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 45, 92, 0.4);
+        }
+
+        .complete-btn.completed {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+        }
+
+        .complete-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .badge-notification {
+            background: linear-gradient(135deg, var(--amarillo) 0%, #FFC400 100%);
+            color: var(--azul-oscuro);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .badge-notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge-notification i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .chapters-sidebar {
+                width: 100%;
+                height: 200px;
+            }
+
+            .course-title-header {
+                display: none;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--texto-medio);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: var(--azul-medio);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="course-header">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Volver
+        </button>
+        <div class="course-title-header" id="headerTitle">Cargando...</div>
+        <div class="progress-header" id="headerProgress">0% completado</div>
+    </div>
+
+    <!-- Layout principal -->
+    <div class="main-layout">
+        <!-- Sidebar de capítulos -->
+        <div class="chapters-sidebar">
+            <div class="sidebar-header">
+                <h2>Contenido del curso</h2>
+                <div class="sidebar-progress" id="sidebarProgress">0 de 0 capítulos completados</div>
+            </div>
+            <div class="chapters-list" id="chaptersList">
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Cargando capítulos...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="video-container" id="videoContainer">
+                <div class="video-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <p>Selecciona un capítulo para comenzar</p>
+                </div>
+            </div>
+
+            <div class="course-details">
+                <div class="course-info-header">
+                    <h1 class="course-title" id="courseTitle">Cargando curso...</h1>
+                    <div class="course-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-user"></i>
+                            <span id="instructor">Instructor</span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="duration">Duración</span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-signal"></i>
+                            <span id="difficulty">Nivel</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="chapterContent">
+                    <h3 id="currentChapterTitle">Selecciona un capítulo</h3>
+                    <p class="chapter-description" id="chapterDescription">
+                        Usa el menú lateral para navegar entre los capítulos del curso.
+                    </p>
+                </div>
+
+                <button class="complete-btn" id="completeBtn" onclick="markAsCompleted()" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Marcar como completado
+                </button>
+
+                <div class="badge-notification" id="badgeNotification">
+                    <i class="fas fa-trophy"></i>
+                    <strong>¡Felicitaciones!</strong><br>
+                    Has completado el curso y ganado una nueva insignia.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        let currentCourse = null;
+        let currentChapter = null;
+        let chapters = [];
+        let userId = null;
+        let completedChapters = new Set();
+
+        function getCourseIdFromURL() {
+            const path = window.location.pathname;
+            const match = path.match(/\/course\/(\d+)/);
+            return match ? match[1] : null;
+        }
+
+        // AUTENTICACION
+        function isAuthenticated() {
+            const token = localStorage.getItem('token');
+            const storedUserId = localStorage.getItem('userId');
+            
+            if (token && storedUserId) {
+                const parsedUserId = parseInt(storedUserId);
+                if (!isNaN(parsedUserId) && parsedUserId > 0) {
+                    userId = parsedUserId;
+                    console.log('Usuario autenticado - ID:', userId);
+                    return true;
+                }
+            }
+            
+            console.log('Usuario NO autenticado');
+            userId = null;
+            return false;
+        }
+
+        // Fetch que añade Authorization SOLO si existe token
+        async function fetchWithOptionalAuth(url, options = {}) {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(url, { ...options, headers });
+
+            //si sale error 401/403 : logout y redirect
+            if ((options.method && ['POST','PUT','DELETE'].includes(options.method.toUpperCase()))
+                && (response.status === 401 || response.status === 403)) {
+                localStorage.clear();
+                window.location.href = '/login';
+                return null;
+            }
+
+            // si 401/403 devuelve null y no fuerza redirect (UI lo maneja)
+            if (response.status === 401 || response.status === 403) {
+                return null;
+            }
+
+            try {
+                return await response.json();
+            } catch (e) {
+                console.error('Error parseando JSON:', e);
+                return null;
+            }
+        }
+
+        async function loadCourseData() {
+            const courseId = getCourseIdFromURL();
+            if (!courseId) {
+                alert('Curso no encontrado');
+                window.history.back();
+                return;
+            }
+
+            try {
+                console.log(' DEBUG - Cargando curso ID:', courseId);
+                
+                // info curso
+                currentCourse = await fetchWithOptionalAuth(`${API_URL}/courses/${courseId}`);
+                console.log(' DEBUG - Curso cargado:', currentCourse);
+
+                // Intentar cargar capítulos con progreso si está autenticado
+                if (isAuthenticated()) {
+                    chapters = await fetchWithOptionalAuth(`${API_URL}/courses/${courseId}/chapters?userId=${userId}`);
+                    // si por alguna razón devolvió null (token expirado), intentar sin userId
+                    if (!chapters) {
+                        chapters = await fetchWithOptionalAuth(`${API_URL}/courses/${courseId}/chapters`);
+                    }
+                } else {
+                    // no autenticado: pedir capítulos sin progreso
+                    chapters = await fetchWithOptionalAuth(`${API_URL}/courses/${courseId}/chapters`);
+                }
+
+                console.log('DEBUG - Capítulos cargados:', chapters);
+
+                if (!currentCourse || !chapters) {
+                    throw new Error('Datos no disponibles');
+                }
+
+                updateCourseInfo();
+                renderChapters();
+
+            } catch (error) {
+                console.error('Error al cargar curso:', error);
+                alert('Error al cargar los datos del curso');
+                window.history.back();
+            }
+        }
+
+        function updateCourseInfo() {
+            document.getElementById('courseTitle').textContent = currentCourse.title || '—';
+            document.getElementById('headerTitle').textContent = currentCourse.title || '—';
+            document.getElementById('instructor').textContent = currentCourse.instructor || 'No especificado';
+            document.getElementById('duration').textContent = (currentCourse.durationHours ? currentCourse.durationHours + ' horas' : '—');
+            document.getElementById('difficulty').textContent = currentCourse.difficulty || '—';
+        }
+
+        function renderChapters() {
+            const container = document.getElementById('chaptersList');
+            completedChapters.clear();
+
+            if (!chapters || chapters.length === 0) {
+                container.innerHTML = '<p style="padding:20px; text-align:center">No hay capítulos disponibles</p>';
+                return;
+            }
+
+            chapters.forEach(ch => { if (ch.isCompleted) completedChapters.add(ch.id); });
+            updateProgress();
+
+            container.innerHTML = chapters.map(chapter => `
+                <div class="chapter-item ${chapter.isCompleted ? 'completed' : ''}" onclick="selectChapter(event, ${chapter.id})">
+                    <div class="chapter-header">
+                        <span class="chapter-number">Capítulo ${chapter.orderNumber}</span>
+                        <i class="chapter-check fas ${chapter.isCompleted ? 'fa-check-circle' : 'fa-circle'}"></i>
+                    </div>
+                    <div class="chapter-title">${chapter.title}</div>
+                    <div class="chapter-duration"><i class="fas fa-clock"></i> ${chapter.durationMinutes || 0} min</div>
+                </div>
+            `).join('');
+        }
+
+        function selectChapter(event, chapterId) {
+            currentChapter = chapters.find(ch => ch.id === chapterId);
+            if (!currentChapter) return;
+
+            console.log('DEBUG - Capítulo seleccionado:', currentChapter);
+
+            document.querySelectorAll('.chapter-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('currentChapterTitle').textContent = currentChapter.title || '—';
+            document.getElementById('chapterDescription').textContent = currentChapter.description || 'Descripción no disponible.';
+
+            const completeBtn = document.getElementById('completeBtn');
+            
+            if (isAuthenticated() && !currentChapter.isCompleted) {
+                completeBtn.style.display = 'block';
+                completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Marcar como completado';
+                completeBtn.classList.remove('completed');
+                completeBtn.disabled = false;
+            } else if (currentChapter.isCompleted) {
+                completeBtn.style.display = 'block';
+                completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completado';
+                completeBtn.classList.add('completed');
+                completeBtn.disabled = true;
+            } else {
+                completeBtn.style.display = 'none';
+            }
+
+            loadChapterContent();
+        }
+
+        function loadChapterContent() {
+            const container = document.getElementById('videoContainer');
+            
+            console.log('DEBUG - CURRENT CHAPTER:', currentChapter);
+            console.log('DEBUG - Content URL:', currentChapter?.contentUrl);
+            console.log('DEBUG - Content Type:', currentChapter?.contentType);
+            
+            if (currentChapter && currentChapter.contentUrl) {
+                if (currentChapter.contentType === 'VIDEO') {
+                    console.log('DEBUG - Cargando VIDEO:', currentChapter.contentUrl);
+                    container.innerHTML = `
+                        <video controls style="width:100%;height:100%">
+                            <source src="${currentChapter.contentUrl}" type="video/mp4">
+                            Tu navegador no soporta el video.
+                        </video>
+                    `;
+                    
+                    const video = container.querySelector('video');
+                    video.onerror = function() {
+                        console.log(' DEBUG - Error cargando video:', currentChapter.contentUrl);
+                    };
+                    video.onloadstart = function() {
+                        console.log(' DEBUG - Video empezó a cargar');
+                    };
+                    
+                } else if (currentChapter.contentType === 'PDF') {
+                    console.log('📄 DEBUG - Cargando PDF:', currentChapter.contentUrl);
+                    
+
+                    const pdfUrl = currentChapter.contentUrl;
+                    
+                    container.innerHTML = `
+                        <div style="width:100%; height:100%; display:flex; flex-direction:column;">
+                            <div style="background: #2c3e50; color: white; padding: 10px; display:flex; justify-content:space-between; align-items:center;">
+                                <strong>📄 Documento PDF</strong>
+                                <div>
+                                    <a href="${pdfUrl}" download 
+                                    style="color: #ffd100; text-decoration: none; margin-right: 15px;">
+                                        <i class="fas fa-download"></i> Descargar
+                                    </a>
+                                    <a href="${pdfUrl}" target="_blank" 
+                                    style="color: #ffd100; text-decoration: none;">
+                                        <i class="fas fa-external-link-alt"></i> Abrir en nueva pestaña
+                                    </a>
+                                </div>
+                            </div>
+                            <div style="flex:1; position:relative; background:#f5f5f5;">
+                                <iframe 
+                                    src="${pdfUrl}#toolbar=0&view=FitH"
+                                    style="width:100%; height:100%; border:none;"
+                                    onload="console.log('PDF cargado correctamente')"
+                                    onerror="console.error(' Error cargando PDF')"
+                                >
+                                    <p>Tu navegador no soporta iframes. 
+                                    <a href="${pdfUrl}" target="_blank">Abrir PDF</a>
+                                    </p>
+                                </iframe>
+                                <div id="pdfLoading" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; display:none;">
+                                    <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#0D2D5C;"></i>
+                                    <p>Cargando PDF...</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    const pdfLoading = container.querySelector('#pdfLoading');
+                    const iframe = container.querySelector('iframe');
+                    
+                    pdfLoading.style.display = 'block';
+                    iframe.style.opacity = '0';
+                    
+                    iframe.onload = function() {
+                        pdfLoading.style.display = 'none';
+                        iframe.style.opacity = '1';
+                        console.log('PDF cargado exitosamente');
+                    };
+                    
+                    iframe.onerror = function() {
+                        pdfLoading.style.display = 'none';
+                        container.innerHTML = `
+                            <div class="video-placeholder">
+                                <i class="fas fa-exclamation-triangle" style="color: #E4002B;"></i>
+                                <p>No se pudo cargar el PDF</p>
+                                <p style="font-size: 14px; margin: 10px 0;">Puede intentar:</p>
+                                <div style="display:flex; gap:10px; justify-content:center;">
+                                    <a href="${pdfUrl}" download class="back-btn" style="text-decoration:none;">
+                                        <i class="fas fa-download"></i> Descargar PDF
+                                    </a>
+                                    <a href="${pdfUrl}" target="_blank" class="back-btn" style="text-decoration:none;">
+                                        <i class="fas fa-external-link-alt"></i> Abrir externamente
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    };
+
+                } else {
+                    console.log(' DEBUG - Tipo de contenido:', currentChapter.contentType);
+                    container.innerHTML = `<div class="video-placeholder"><i class="fas fa-file-alt"></i><p>${currentChapter.contentType}</p><a href="${currentChapter.contentUrl}" target="_blank">Ver contenido</a></div>`;
+                }
+            } else {
+                console.log(' DEBUG - NO hay contentUrl disponible o currentChapter es null');
+                container.innerHTML = `
+                    <div class="video-placeholder">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Contenido no disponible</p>
+                        <p style="font-size: 12px; margin-top: 10px;">URL: ${currentChapter?.contentUrl || 'N/A'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function markAsCompleted() {
+            console.log('DEBUG - Intentando marcar como completado...');
+            
+            const token = localStorage.getItem('token');
+            const storedUserId = localStorage.getItem('userId');
+            
+            console.log(' DEBUG - Token:', token ? ' Presente' : ' Faltante');
+            console.log(' DEBUG - UserId:', storedUserId);
+            
+            if (!token || !storedUserId) {
+                alert(' Debes iniciar sesión para guardar tu progreso');
+                return;
+            }
+
+            userId = parseInt(storedUserId);
+            if (!userId || userId <= 0) {
+                console.error(' userId inválido:', userId);
+                alert('Error de sesión. Por favor, vuelve a iniciar sesión.');
+                localStorage.clear();
+                return;
+            }
+
+            if (!currentChapter || currentChapter.isCompleted) {
+                console.log(' Capítulo no válido o ya completado');
+                return;
+            }
+
+            const completeBtn = document.getElementById('completeBtn');
+            const originalText = completeBtn.innerHTML;
+            
+            completeBtn.disabled = true;
+            completeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+            try {
+                console.log('Enviando progreso - userId:', userId, 'chapterId:', currentChapter.id);
+                
+                const response = await fetch(
+                    `${API_URL}/progress/chapter/complete?userId=${userId}&chapterId=${currentChapter.id}`,
+                    { 
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+
+                console.log(' Response status:', response.status);
+                
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('SESSION_EXPIRED');
+                } else if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log(' Resultado:', result);
+                
+                if (result && result.success !== false) {
+                    currentChapter.isCompleted = true;
+                    completedChapters.add(currentChapter.id);
+                    completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Completado';
+                    completeBtn.classList.add('completed');
+                    completeBtn.disabled = true;
+                    
+                    document.querySelector('.chapter-item.active')?.classList.add('completed');
+                    updateProgress();
+                    
+                    console.log(' Progreso guardado correctamente');
+                    
+                    if (result.progressPercentage >= 100) {
+                        document.getElementById('badgeNotification').classList.add('show');
+                        setTimeout(() => document.getElementById('badgeNotification').classList.remove('show'), 5000);
+                    }
+                } else {
+                    throw new Error(result?.error || 'Error del servidor');
+                }
+
+            } catch (error) {
+                console.error(' Error al marcar completado:', error);
+                
+                completeBtn.disabled = false;
+                completeBtn.innerHTML = originalText;
+                
+                if (error.message === 'SESSION_EXPIRED' || error.message.includes('401') || error.message.includes('403')) {
+                    alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
+                    localStorage.clear();
+                } else if (error.message.includes('Failed to fetch')) {
+                    alert('Error de conexión. Verifica tu internet e intenta nuevamente.');
+                } else {
+                    alert('Error al guardar el progreso: ' + error.message);
+                }
+            }
+        }
+
+        function updateProgress() {
+            const total = chapters.length;
+            const completed = completedChapters.size;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('headerProgress').textContent = `${percentage}% completado`;
+            document.getElementById('sidebarProgress').textContent = `${completed} de ${total} capítulos completados`;
+        }
+
+        function goBack() { window.history.back(); }
+
+        window.addEventListener('load', () => {
+            loadCourseData();
+        });
+    </script>
+</body>
+</html>

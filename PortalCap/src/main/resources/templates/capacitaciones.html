@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulos de Capacitación</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --azul-oscuro: #0D2D5C;
+            --azul-medio: #1E4A8B;
+            --amarillo: #FFD100;
+            --rojo: #E4002B;
+            --verde-admin: #00A86B;
+            --gris-claro: #f5f7fa;
+            --gris-medio: #e4e7eb;
+            --texto-oscuro: #2C3E50;
+            --texto-medio: #5D6D7E;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(13, 45, 92, 0.2);
+            border-bottom: 3px solid var(--amarillo);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--amarillo);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background-color: var(--rojo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(228, 0, 43, 0.3);
+        }
+
+        .nav-btn:hover {
+            background-color: #C40024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(228, 0, 43, 0.4);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--amarillo) 0%, #FFC400 100%);
+            color: var(--azul-oscuro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu button {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            color: var(--texto-oscuro);
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu button:hover {
+            background: var(--gris-claro);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 60px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .modules-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+            justify-items: center;
+        }
+
+        .modules-container .glass {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            height: 320px;
+            background: linear-gradient(#fff2, transparent);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .modules-container .glass:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 35px 35px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(#fff3, transparent);
+        }
+
+        .modules-container .glass.admin-module {
+            border: 2px solid var(--verde-admin);
+        }
+
+        .modules-container .glass.admin-module i {
+            color: var(--verde-admin);
+        }
+
+        .modules-container .glass::before {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .modules-container .glass i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--amarillo);
+            transition: transform 0.3s ease;
+        }
+
+        .modules-container .glass:hover i {
+            transform: scale(1.1);
+        }
+
+        .module-description {
+            padding: 0 15px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 100px;
+            border-top: 3px solid var(--amarillo);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .footer-logo span {
+            color: var(--amarillo);
+        }
+
+        .copyright {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .modules-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="window.location.href='/dashboard'">Portal<span>Cap</span></div>
+            <div class="nav-menu">
+                <button class="nav-btn" onclick="window.location.href='/dashboard'">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i>
+                    Inicio
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/badge'">
+                    <i class="fas fa-award" style="margin-right: 8px;"></i>
+                    Insignias
+                </button>
+            </div>
+            <div class="user-info" onclick="toggleDropdown()">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Usuario</span>
+                <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <button onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <h1 class="page-title">Módulos de Capacitación</h1>
+        <p class="page-subtitle">Selecciona un módulo para comenzar tu aprendizaje</p>
+        
+        <div class="modules-container" id="modulesContainer">
+            <div class="glass" data-text="Fullstack Development" onclick="redirectToModule(1, 'Fullstack Development')">
+                <i class="fas fa-laptop-code"></i>
+                <div class="module-description">
+                    Desarrollo completo de aplicaciones web: Frontend, Backend y Bases de Datos
+                </div>
+            </div>
+
+            <div class="glass" data-text="APIs e Integraciones" onclick="redirectToModule(2, 'APIs e Integraciones')">
+                <i class="fas fa-plug"></i>
+                <div class="module-description">
+                    DataPower, IBM Bus, Broker, APIs REST, Microservicios y arquitecturas de integración
+                </div>
+            </div>
+
+            <div class="glass" data-text="Cloud" onclick="redirectToModule(3,'Cloud')">
+                <i class="fas fa-cloud"></i>
+                <div class="module-description">
+                    Computación en la nube, infraestructura como servicio, plataformas cloud y DevOps
+                </div>
+            </div>
+
+            <div class="glass" data-text="Data Engineering" onclick="redirectToModule(4,'Data Engineering')">
+                <i class="fas fa-database"></i>
+                <div class="module-description">
+                    Ingeniería de datos, pipelines, ETL, data lakes y arquitecturas de big data
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">Portal<span>Cap</span></div>
+            <div class="copyright">
+                Portal de Capacitaciones © 2025 - Todos los derechos reservados
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+
+        // Verificar auth
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return false;
+            }
+            return true;
+        }
+
+        // Dropdown
+        function toggleDropdown() {
+            document.getElementById('dropdownMenu').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.user-info')) {
+                const dropdown = document.getElementById('dropdownMenu');
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+
+        //  datos usuario
+        function loadUserData() {
+            const userName = localStorage.getItem('userName') || 'Usuario';
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+        }
+
+        // si es admin
+        function checkAdminRole() {
+            const userRole = localStorage.getItem('userRole');
+            if (userRole === 'ADMIN') {
+                const container = document.getElementById('modulesContainer');
+                container.innerHTML += `
+                    <div class="glass admin-module" data-text="Administrar" onclick="redirectToAdmin()">
+                        <i class="fas fa-cogs"></i>
+                        <div class="module-description">
+                            Panel administrativo para gestionar capacitaciones y usuarios
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function redirectToModule(moduleId, moduleName) {
+            localStorage.setItem('currentModuleId', moduleId);
+            localStorage.setItem('currentModuleName', moduleName);
+            window.location.href = `/module?moduleId=${moduleId}`;
+        }
+
+        function redirectToAdmin() {
+            window.location.href = '/panelAdmin';
+        }
+
+        window.addEventListener('load', () => {
+            if (!checkAuth()) return;
+            loadUserData();
+            checkAdminRole();
+            
+            // Intenta cargar datos adicionales desde API
+            setTimeout(() => {
+                try {
+                    console.log('Cargando datos adicionales...');
+                } catch (error) {
+                    console.log('No se pudieron cargar datos adicionales, pero la página funciona');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
