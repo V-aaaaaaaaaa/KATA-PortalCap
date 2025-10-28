@@ -30,13 +30,27 @@ Para la ejecución del proyecto se debe:
 
 3. Una vez en la carpeta, levantar los servicios de docker: docker-compose up --build. (La primera ejecución suele tardar unos minutos mientras se construye).
 
-4. Finalmente acceder a la aplicación, para iniciar sesión y usar la aplicación: :http://localhost:8080/ (Nota: Los endpoints de la API están protegidos por Spring Security y requieren autenticación (JWT).
-MailHog:http://localhost:8025/
+4. Finalmente acceder a la aplicación, para iniciar sesión y usar la aplicación: http://localhost:8080/ (Nota: Los endpoints de la API están protegidos por Spring Security y requieren autenticación (JWT).
+MailHog http://localhost:8025/
 
 El sistema crea automaticamente desde la base de datos, datos de prueba (usuarios, módulos, cursos, capítulos, progreso, insignias, notificaciones).
+Actualmente hay dos scripts: uno inicial y otro con los datos de prueba más recientes. Se recomienda ejecutar primero el script inicial (init.sql) y luego el actualizado (portal_capacitaciones.sql)si quieres tener los datos de prueba completos.
+
+Los Usuarios de prueba son:
+Usuario Administrador:
+Email: admin@empresa.com Contraseña: Password123
+Usuarios:
+Email: maria.garcia@empresa.com Contraseña: Password123
+Email: juan.perez@empresa.com Contraseña: Password123
+
+4 módulos de capacitación: Fullstack Development, APIs e Integraciones, Cloud Computing, Data Engineering.
+cursos con diferentes niveles de dificultad.
+Capítulos con contenido multimedia (videos y documentos PDF).
+Sistema de insignias por completación de cursos.
+
 Cada módulo agrupa varios cursos. Cada curso está dividido en capitulos que puede incluir videos y documentos.
 El progreso de cada usuario se gestiona mediante la tabla de "user_progress"
-El modelo es totalemente escalable, permitiendo añadir nuevos tipos de contenido sin alterar la estructura.
+El modelo es totalmente escalable, permitiendo añadir nuevos tipos de contenido sin alterar la estructura.
 
 
 
